@@ -8,6 +8,7 @@ import type { SitePost } from '@/lib/site-connector'
 import { EditableSiteShell } from '@/editable/shell/EditableSiteShell'
 import { EditableArticleComments } from '@/editable/components/EditableArticleComments'
 import { getTaskTheme, taskThemeStyle } from '@/editable/theme/task-themes'
+import { Ads } from '@/lib/ads'
 
 export const revalidate = 3
 
@@ -290,30 +291,59 @@ function ClassifiedDetail({ post, related }: { post: SitePost; related: SitePost
   )
 }
 
-// ----- Image: a dark, gallery-led canvas -----
+// ----- Image: cinematic full-bleed hero + grid gallery -----
 function ImageDetail({ post, related }: { post: SitePost; related: SitePost[] }) {
   const images = getImages(post)
-  const gallery = images.length ? images : ['/placeholder.svg?height=900&width=1200']
+  const hero = images[0] || '/placeholder.svg?height=900&width=1600'
+  const gallery = images.slice(1)
+  const category = categoryOf(post, 'Image')
   return (
     <>
-      <section className="mx-auto max-w-[var(--editable-container)] px-6 py-14 sm:py-20 lg:px-8">
-        <BackLink task="image" />
-        <div className="mt-8 grid gap-10 lg:grid-cols-[1.4fr_0.6fr]">
-          <div className="columns-1 gap-5 [column-fill:_balance] sm:columns-2">
-            {gallery.map((image, index) => (
-              <figure key={`${image}-${index}`} className="mb-5 break-inside-avoid overflow-hidden rounded-[var(--tk-radius)] border border-[var(--tk-line)] bg-[var(--tk-surface)]">
-                <img src={image} alt="" className="w-full object-cover" />
-              </figure>
-            ))}
+      {/* Full-bleed hero */}
+      <div className="relative w-full overflow-hidden" style={{ aspectRatio: '21/9', minHeight: '340px', maxHeight: '680px' }}>
+        <img src={hero} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
+        <div className="absolute bottom-0 left-0 right-0 px-6 pb-10 sm:px-10 lg:px-16">
+          <div className="mx-auto max-w-[var(--editable-container)]">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-white/80 backdrop-blur-sm">
+              <Camera className="h-3.5 w-3.5 text-[var(--tk-accent)]" /> {category}
+            </div>
+            <h1 className="editable-display mt-4 max-w-4xl text-3xl font-bold leading-[1.05] tracking-[-0.03em] text-white drop-shadow-lg sm:text-5xl lg:text-6xl">{post.title}</h1>
           </div>
-          <aside className="lg:sticky lg:top-24 lg:self-start">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[var(--tk-line)] px-3.5 py-1.5 text-xs font-medium text-[var(--tk-muted)]"><Camera className="h-3.5 w-3.5 text-[var(--tk-accent)]" /> Image story</div>
-            <h1 className="editable-display mt-6 text-4xl font-semibold leading-[1.05] tracking-[-0.03em] sm:text-5xl">{post.title}</h1>
-            {leadText(post) ? <p className="mt-6 text-lg leading-8 text-[var(--tk-muted)]">{leadText(post)}</p> : null}
-            <BodyContent post={post} compact />
+        </div>
+      </div>
+
+      {/* Content + gallery */}
+      <section className="mx-auto max-w-[var(--editable-container)] px-6 py-12 sm:py-16 lg:px-8">
+        <div className="mb-6">
+          <BackLink task="image" />
+        </div>
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_380px]">
+          {/* Body */}
+          <article className="min-w-0">
+            {leadText(post) ? <p className="text-lg leading-8 text-[var(--tk-muted)]">{leadText(post)}</p> : null}
+            <BodyContent post={post} />
+          </article>
+
+          {/* Sidebar: ad + gallery grid */}
+          <aside className="lg:sticky lg:top-24 lg:self-start space-y-6">
+            <Ads slot="sidebar" showLabel className="w-full" />
+            {gallery.length ? (
+              <div>
+                <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--tk-muted)]">More from this shoot</p>
+                <div className="grid grid-cols-2 gap-2.5">
+                  {gallery.slice(0, 6).map((image, index) => (
+                    <div key={`${image}-${index}`} className={`overflow-hidden rounded-[var(--tk-radius)] border border-[var(--tk-line)] bg-[var(--tk-surface)] ${index === 0 ? 'col-span-2 aspect-[16/9]' : 'aspect-square'}`}>
+                      <img src={image} alt="" className="h-full w-full object-cover transition duration-500 hover:scale-105" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </aside>
         </div>
       </section>
+
       <RelatedStrip task="image" related={related} />
     </>
   )
