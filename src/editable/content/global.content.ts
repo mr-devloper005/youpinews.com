@@ -3,52 +3,54 @@ import { slot4BrandConfig } from '@/editable/theme/brand.config'
 export const globalContent = {
   site: {
     name: slot4BrandConfig.siteName,
-    tagline: slot4BrandConfig.tagline || 'Independent reading platform',
+    tagline: slot4BrandConfig.tagline || 'Business Discovery Platform',
     domain: slot4BrandConfig.domain,
     baseUrl: slot4BrandConfig.baseUrl,
   },
   nav: {
-    tagline: 'Independent reading platform',
+    tagline: 'Find · Connect · Grow',
+    announcement: [
+      'New profiles added daily — discover fresh businesses today',
+      'Free to list your business · No credit card needed',
+      '500+ verified business profiles and growing',
+    ],
     primaryLinks: [
-      { label: 'Articles', href: '/articles' },
-      { label: 'Visuals', href: '/image-sharing' },
-      { label: 'Listings', href: '/listings' },
+      { label: 'Articles', href: '/article' },
       { label: 'Contact', href: '/contact' },
     ],
     actions: {
-      primary: { label: 'Start exploring', href: '/' },
-      secondary: { label: 'Submit', href: '/contact' },
+      primary: { label: 'Add Profile', href: '/create' },
+      secondary: { label: 'Sign In', href: '/login' },
     },
   },
   footer: {
-    tagline: 'Stories, resources, and discoverable posts',
-    description: 'A connected publishing surface for articles, visuals, listings, profiles, bookmarks, and downloadable resources.',
+    tagline: 'Find · Connect · Grow',
+    description: 'Discover local businesses, creative profiles, and visual content through one connected directory built for modern business owners.',
     columns: [
       {
-        title: 'Explore',
+        title: 'Discover',
         links: [
-          { label: 'Articles', href: '/articles' },
-          { label: 'Listings', href: '/listings' },
-          { label: 'Images', href: '/image-sharing' },
-          { label: 'PDF Library', href: '/pdf' },
+          { label: 'Articles', href: '/article' },
+          { label: 'Resources', href: '/pdf' },
         ],
       },
       {
-        title: 'Site',
+        title: 'Business',
         links: [
+          { label: 'Add Your Profile', href: '/create' },
           { label: 'About', href: '/about' },
           { label: 'Contact', href: '/contact' },
         ],
       },
     ],
-    bottomNote: 'Built for clean discovery and connected publishing.',
+    bottomNote: 'Free to list · Verified profiles · Growing community.',
   },
   commonLabels: {
-    readMore: 'Read more',
+    readMore: 'View profile',
     viewAll: 'View all',
     explore: 'Explore',
     latest: 'Latest',
     related: 'Related',
-    published: 'Published',
+    published: 'Listed',
   },
 } as const
