@@ -67,8 +67,11 @@ const safeUrl = (value: string) => /^https?:\/\//i.test(value) ? value : '#'
 const linkifyMarkdown = (value: string) => value
   .replace(/\[([^\]]+)]\((https?:\/\/[^\s)]+)\)/gi, (_match, label, url) => `<a href="${safeUrl(url)}" target="_blank" rel="nofollow noopener noreferrer">${label}</a>`)
 
-const linkifyText = (value: string) => linkifyMarkdown(value)
-  .replace(/(^|[\s(>])((https?:\/\/)[^\s<)]+)/gi, (_match, prefix, url) => `${prefix}<a href="${safeUrl(url)}" target="_blank" rel="nofollow noopener noreferrer">${url}</a>`)
+const linkifyText = (value: string) => {
+  const linked = linkifyMarkdown(value)
+  const parts = linked.split(/(<a\s[^>]*>[\s\S]*?<\/a>)/gi)
+  return parts.map((part, i) => i % 2 === 1 ? part : part.replace(/(^|[\s(>])((https?:\/\/)[^\s<)]+)/gi, (_match, prefix, url) => `${prefix}<a href="${safeUrl(url)}" target="_blank" rel="nofollow noopener noreferrer">${url}</a>`)).join('')
+}
 
 const hardenLinks = (html: string) => html.replace(/<a\s+([^>]*href=["'][^"']+["'][^>]*)>/gi, (_match, attrs) => {
   let next = String(attrs).replace(/\s+on\w+=("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
@@ -82,7 +85,9 @@ const sanitizeHtml = (html: string) => hardenLinks(html
   .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
   .replace(/<(iframe|object|embed)[^>]*>[\s\S]*?<\/\1>/gi, '')
   .replace(/\s+on\w+=("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
-  .replace(/(href|src)=(['"])javascript:[\s\S]*?\2/gi, '$1="#"'))
+  .replace(/(href|src)=(['"])javascript:[\s\S]*?\2/gi, '$1="#"')
+  .replace(/<p\b[^>]*>\s*(<(?:div|section|article|aside|header|footer|main|nav|ul|ol|table|blockquote|form|figure|details|fieldset|address|pre|h[1-6]|hr)\b)/gi, '$1')
+  .replace(/(<\/(?:div|section|article|aside|header|footer|main|nav|ul|ol|table|blockquote|form|figure|details|fieldset|address|pre|h[1-6])>)\s*<\/p>/gi, '$1'))
 
 const formatPlainText = (raw: string) => {
   const value = raw.trim()
@@ -524,15 +529,15 @@ function BadgeLine({ label, value }: { label: string; value: string }) {
   )
 }
 
-function RelatedPanel({ task, post, related }: { task: TaskKey; post: SitePost; related: SitePost[] }) {
+function RelatedPanel({ task, related }: { task: TaskKey; post?: SitePost; related: SitePost[] }) {
   const taskConfig = getTaskConfig(task)
   return (
     <div className="space-y-6">
       <div className="rounded-[var(--tk-radius)] border border-[var(--tk-line)] bg-[var(--tk-surface)] p-6">
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--tk-muted)]">About this post</p>
         <div className="mt-4 grid gap-2.5 text-sm text-[var(--tk-muted)]">
-          <p className="inline-flex items-center gap-2"><Tag className="h-4 w-4 text-[var(--tk-accent)]" /> {taskConfig?.label || task}</p>
-          <p className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-[var(--tk-accent)]" /> {SITE_CONFIG.name}</p>
+          <span className="inline-flex items-center gap-2"><Tag className="h-4 w-4 text-[var(--tk-accent)]" /> {taskConfig?.label || task}</span>
+          <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-[var(--tk-accent)]" /> {SITE_CONFIG.name}</span>
         </div>
       </div>
       {related.length ? (

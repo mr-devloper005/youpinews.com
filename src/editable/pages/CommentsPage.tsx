@@ -96,9 +96,9 @@ export default function CommentsPage() {
         <section className="rounded-2xl border border-[var(--editable-border)] bg-[var(--slot4-surface-bg)] p-6 shadow-[0_2px_8px_rgba(0,0,0,0.4)] sm:p-8">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--slot4-muted-text)]">
+              <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--slot4-muted-text)]">
                 <MessageSquare className="h-4 w-4" /> Local comments
-              </p>
+              </span>
               <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] sm:text-5xl">Comments</h1>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--slot4-muted-text)]">
                 Review comments saved in this browser from article pages.
