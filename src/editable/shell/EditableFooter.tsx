@@ -7,7 +7,6 @@ import { globalContent } from '@/editable/content/global.content'
 import { useEditableLocalAuthSession } from '@/editable/components/EditableLocalAuthForms'
 
 export function EditableFooter() {
-  const taskLinks = SITE_CONFIG.tasks.filter((task) => task.enabled)
   const year = new Date().getFullYear()
   const { session, logout } = useEditableLocalAuthSession()
 
@@ -40,9 +39,7 @@ export function EditableFooter() {
         {/* Col 4: Connect / Brand */}
         <div>
           <Link href="/" className="inline-flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--slot4-accent)]">
-              <img src="/favicon.png?v=20260413" alt={SITE_CONFIG.name} className="h-6 w-6 object-contain" />
-            </span>
+            <img src="/favicon.png?v=20260413" alt={SITE_CONFIG.name} className="h-9 w-9 object-contain" />
             <span className="editable-display text-[15px] font-black">{SITE_CONFIG.name}</span>
           </Link>
           <p className="mt-4 text-[13px] leading-6 text-[var(--slot4-muted-text)]">

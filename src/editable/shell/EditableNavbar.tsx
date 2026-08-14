@@ -65,9 +65,7 @@ export function EditableNavbar() {
         <div className="mx-auto flex min-h-[64px] w-full max-w-[var(--editable-container)] items-center gap-4 px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link href="/" className="mr-4 flex shrink-0 items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--slot4-accent)]">
-              <img src="/favicon.png?v=20260413" alt={SITE_CONFIG.name} className="h-6 w-6 object-contain" />
-            </span>
+            <img src="/favicon.png?v=20260413" alt={SITE_CONFIG.name} className="h-9 w-9 object-contain" />
             <span className="editable-display hidden text-[1.05rem] font-black tracking-[-0.01em] text-[var(--slot4-page-text)] md:block">
               {SITE_CONFIG.name}
             </span>
